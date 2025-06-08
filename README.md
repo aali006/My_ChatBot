@@ -1,12 +1,61 @@
-# My_ChatBot
-Chatbot
-Streamlit PDF Chatbot
-This is a Streamlit-based chatbot application that allows users to upload PDF files and ask questions about their contents. The application uses LangChain for text splitting, OpenAI for embeddings, and FAISS for similarity search. The questions are answered using a GPT-3.5-turbo model.
+# 📄 DocuChat: Conversational PDF Question Answering App
 
-Features
-Upload PDF files.
-Extract text from PDF files.
-Split the extracted text into manageable chunks.
-Generate embeddings for the text chunks.
-Perform similarity search to find relevant text chunks based on user questions.
-Use GPT-3.5-turbo to answer questions based on the relevant text chunks.
+DocuChat is an intelligent PDF-based chatbot built with **LangChain**, **OpenAI**, and **Streamlit**. Just upload any PDF file (e.g., research paper, resume, contract), ask questions about it, and get direct answers — powered by GPT-3.5.
+
+---
+
+## 🔍 What it Does
+
+✅ Upload any PDF document  
+✅ Extracts and understands its contents  
+✅ Asks questions like:  
+- “Summarize this paper”  
+- “What are the key findings?”  
+- “What was the total expense in the invoice?”  
+
+Answers are contextually generated from the PDF, not generic!
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer       | Technology                     |
+|------------|---------------------------------|
+| UI         | Streamlit                       |
+| Backend    | Python, LangChain               |
+| LLM        | OpenAI GPT-3.5-Turbo            |
+| Embedding  | OpenAI Embeddings               |
+| Vector DB  | FAISS                           |
+| PDF Reader | PyPDF2                          |
+
+---
+
+## 📦 Setup Instructions
+
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/docu-chatbot.git
+cd docu-chatbot
+
+###2. Add Your OpenAI API Key
+KEY = "your-openai-key-here"
+
+###3. Run the App
+
+**How It Works**-
+- User uploads a PDF using the sidebar.
+
+- PDF text is extracted using PyPDF2.
+
+- Text is split into chunks for semantic understanding.
+
+- Each chunk is converted into vector embeddings using OpenAI Embeddings.
+
+- FAISS vector database indexes and stores these chunks.
+
+- When a question is asked:
+
+- The app retrieves the most relevant chunks from FAISS.
+
+- GPT-3.5-Turbo generates a final answer using those retrieved chunks.
+
