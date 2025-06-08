@@ -34,7 +34,7 @@ Answers are contextually generated from the PDF, not generic!
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone [https://github.com/aali006/My_ChatBot.git]
+git clone https://github.com/aali006/My_ChatBot.git
 cd docu-chatbot
 ```
 
