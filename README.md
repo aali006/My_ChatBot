@@ -60,4 +60,7 @@ KEY = "your-openai-key-here"
 
 - GPT-3.5-Turbo generates a final answer using those retrieved chunks.
 
+  ![Asmat’s ChatBot](https://github.com/user-attachments/assets/0c660bb3-7990-43ac-909b-f43f18a6f57d)
+
+
 
