@@ -36,6 +36,7 @@ Answers are contextually generated from the PDF, not generic!
 ```bash
 git clone https://github.com/your-username/docu-chatbot.git
 cd docu-chatbot
+```
 
 ###2. Add Your OpenAI API Key
 KEY = "your-openai-key-here"
@@ -58,7 +59,5 @@ KEY = "your-openai-key-here"
 - The app retrieves the most relevant chunks from FAISS.
 
 - GPT-3.5-Turbo generates a final answer using those retrieved chunks.
-
-![Asmat’s ChatBot](https://github.com/user-attachments/assets/10c013f2-1ea6-4693-ad7f-166572ed3c56)
 
 
