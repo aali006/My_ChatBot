@@ -1,151 +1,79 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# Importing required libraries
+import streamlit as st  # Web UI framework
 
+from PyPDF2 import PdfReader  # For reading PDF content
 
-import streamlit as st 
+from langchain.text_splitter import RecursiveCharacterTextSplitter  # To split large text into chunks
+from langchain.vectorstores import FAISS  # For storing and searching vector embeddings
+from langchain.embeddings.openai import OpenAIEmbeddings  # OpenAI-based embedding model
+from langchain.chains.question_answering import load_qa_chain  # To load a question-answering chain
+from langchain.chat_models import ChatOpenAI  # Chat model like gpt-3.5-turbo from OpenAI
 
-
-# In[2]:
-
-
-from PyPDF2 import PdfReader
-
-
-# In[3]:
-
-
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-
-
-# In[4]:
-
-
-from langchain.vectorstores import FAISS
-
-
-# In[5]:
-
-
-from langchain.embeddings.openai import OpenAIEmbeddings
-
-
-# In[6]:
-
-
-from langchain.chains.question_answering import load_qa_chain
-
-
-# In[7]:
-
-
-from langchain.chat_models import ChatOpenAI
-
-
-# In[8]:
-
-
-# openai key
-
-
-# In[9]:
-
-
+# ---------- Step 1: API Key ----------
+# Add your OpenAI API key here
 KEY = "enter your key"
 
-
-# In[10]:
-
-
-# To upload PDF files
-
-
-# In[11]:
-
-
+# ---------- Step 2: Web UI Layout ----------
+# Streamlit header for the main app
 st.header("Asmat Chatbot")
 
-
-# In[12]:
-
-
+# Sidebar layout for file upload
 with st.sidebar:
     st.title("Your Documents")
-    doc = st.file_uploader("Upload your Pdf File")
+    doc = st.file_uploader("Upload your PDF File")
 
-
-# In[13]:
-
-
-# Extract text
-
-
-# In[14]:
-
-
+# ---------- Step 3: Process the Uploaded PDF ----------
 if doc is not None:
-    pdf = PdfReader(file)
+    # Read the PDF
+    pdf = PdfReader(doc)
     words = ""
+    
+    # Extract text from all pages
     for page in pdf.pages:
         words += page.extract_text()
 
-#Break it into chunks
+    # ---------- Step 4: Text Splitting ----------
+    # Split text into manageable chunks
     text_splitter = RecursiveCharacterTextSplitter(
-        separators="\n",
-        chunk_size=1000,
-        chunk_overlap=150,
+        separators="\n",      # Split by newline
+        chunk_size=1000,      # Max characters per chunk
+        chunk_overlap=150,    # Overlap to preserve context
         length_function=len
     )
     portion = text_splitter.split_text(words)
 
-
-    # generating embedding
+    # ---------- Step 5: Embedding Creation ----------
+    # Generate text embeddings using OpenAI
     embeddings = OpenAIEmbeddings(openai_api_key=KEY)
 
-    # creating vector store - FAISS
+    # Create vector database with FAISS
     vector = FAISS.from_texts(portion, embeddings)
 
+# ---------- Step 6: User Question Input ----------
+# Ask user to input a question
+question = st.text_input("Write your question")
 
-# In[15]:
-
-
-# box to enter question
-
-
-# In[16]:
-
-
-question = st.text_input("write your question")
-
-
-# In[17]:
-
-
-# similarity test
-
-
-# In[18]:
-
-
+# ---------- Step 7: Answer Generation ----------
 if question:
+    # Search for relevant text chunks using vector similarity
     match = vector.similarity_search(question)
-    # llm
+
+    # Load OpenAI language model (chat)
     llm = ChatOpenAI(
-        openai_api_key = KEY,
-        temperature = 0.2,
-        max_tokens = 1000,
-        model_name = 'gpt-3.5-turbo'     
+        openai_api_key=KEY,
+        temperature=0.2,        # Control randomness
+        max_tokens=1000,        # Max tokens in response
+        model_name='gpt-3.5-turbo'  # OpenAI model
     )
     
-    #output
-    chain = load_qa_chain(llm, chain_type = 'stuff')
-    response = chain.run(input_documents = match, question = question)
+    # Load QA chain using the retrieved documents
+    chain = load_qa_chain(llm, chain_type='stuff')
+
+    # Generate answer using retrieved context and user's question
+    response = chain.run(input_documents=match, question=question)
+
+    # Display answer in Streamlit
     st.write(response)
-
-
-# In[ ]:
-
-
-
-
